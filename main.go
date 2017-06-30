@@ -68,6 +68,9 @@ func NewHealthCheck(url string, notify []string) *HealthCheck {
 				}
 				check.Lock()
 				check.Failures = append(check.Failures, failure)
+				if len(check.Failures) > 100 {
+					check.Failures = check.Failures[1:]
+				}
 				check.Unlock()
 
 				if t0-check.LastNotificationMs > MIN_NOTIFICATION_INTERVAL_MS && fixed {

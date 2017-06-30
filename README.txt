@@ -2,6 +2,7 @@
 * get at least 2 free tier containers (like aws and google cloud)
 * set it up like so:
 
+$ go get github.com/sfreiberg/gotwilio
 $ go build -o not-today
 
 copy not-today to INSTANCE-A(lets say aws) and to INSTANCE-B(lets say google cloud)
