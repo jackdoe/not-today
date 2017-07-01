@@ -50,27 +50,16 @@ func NewHealthCheck(url string, notify []string) *HealthCheck {
 		go check.send(fmt.Sprintf("%s - started monitoring", check.URL))
 		for {
 			t0 := nowMs()
-			var err error
-		CHECK:
-			for i := 0; i < 3; i++ {
-				resp, err := client.Get(check.URL)
-				if err == nil {
-					_, err = ioutil.ReadAll(resp.Body)
-				}
-
-				if err == nil && resp.StatusCode != 200 {
-					err = errors.New(fmt.Sprintf("expected status code %d, but got %d", 200, resp.StatusCode))
-				}
-				if resp != nil && resp.Body != nil {
-					resp.Body.Close()
-				}
-				if err != nil {
-					// retry 3 times until success
-					break CHECK
-				}
-				time.Sleep(1 * time.Second)
+			resp, err := client.Get(check.URL)
+			if err == nil {
+				_, err = ioutil.ReadAll(resp.Body)
 			}
-
+			if err == nil && resp.StatusCode != 200 {
+				err = errors.New(fmt.Sprintf("expected status code %d, but got %d", 200, resp.StatusCode))
+			}
+			if resp != nil && resp.Body != nil {
+				resp.Body.Close()
+			}
 			if err != nil {
 				failure := &Failure{
 					Error:   err.Error(),
