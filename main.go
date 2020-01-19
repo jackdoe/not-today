@@ -81,7 +81,7 @@ func NewHealthCheck(url string, interval int, cmd string) *HealthCheck {
 				err = fmt.Errorf("%s expected status code %d, but got %d", check.URL, 200, resp.StatusCode)
 			}
 
-			if resp.Body != nil {
+			if resp != nil && resp.Body != nil {
 				resp.Body.Close()
 			}
 			if err != nil {
